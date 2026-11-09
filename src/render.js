@@ -22,7 +22,7 @@ export function draw() {
   const curTileSize = CONFIG.GRID_SIZE * state.scale;
   const worldPxW = CONFIG.MAP_WIDTH * curTileSize;
   const worldPxH = CONFIG.MAP_HEIGHT * curTileSize;
-  const borderW = Math.max(1, Math.round(2 * state.scale));
+  const borderW = Math.max(1, Math.round(1 * state.scale));
 
   ctx.fillStyle = CONFIG.COLORS.VOID;
   ctx.fillRect(Math.floor(state.offsetX), Math.floor(state.offsetY), Math.ceil(worldPxW), Math.ceil(worldPxH));

@@ -1,7 +1,7 @@
 export const CONFIG = {
-  GRID_SIZE: 16,
-  MAP_WIDTH: 128,
-  MAP_HEIGHT: 128,
+  GRID_SIZE: 8,
+  MAP_WIDTH: 64,
+  MAP_HEIGHT: 64,
   PALETTE: [
     { name: 'Blue', value: '#0000FF' },
     { name: 'Purple', value: '#8B5CF6' },
