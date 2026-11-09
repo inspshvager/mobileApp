@@ -1,116 +1,158 @@
-.logo.vite:hover {
-  filter: drop-shadow(0 0 2em #747bff);
-}
-
-.logo.typescript:hover {
-  filter: drop-shadow(0 0 2em #2d79c7);
-}
+/* --- 1. Global Reset & Base --- */
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
-
-  color: #0f0f0f;
-  background-color: #f6f6f6;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+
+  color: #0f0f0f;
+  background-color: #f6f6f6;
 }
 
-.container {
+html, body {
   margin: 0;
-  padding-top: 10vh;
+  width: 100%;
+  height: 100%;
+  background: #1a1a1a;
+}
+
+body {
+  padding: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* --- 2. App Layout Structure --- */
+.container,
+#app-container {
+  width: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  text-align: center;
+  box-sizing: border-box;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: 0.75s;
+#map-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  background: #111111;
+  cursor: crosshair;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.logo.tauri:hover {
-  filter: drop-shadow(0 0 2em #24c8db);
-}
-
-.row {
+/* --- 3. Top Menu Bar --- */
+.menu-bar {
+  background: #252525;
+  color: white;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: clamp(40px, 6vw, 52px);
+  padding: 0 12px 0 max(12px, env(safe-area-inset-left));
+  box-sizing: border-box;
+  z-index: 100;
+  user-select: none;
+}
+
+.menu-items {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.menu-items span {
+  font-size: 0.9em;
+  transition: color 0.2s;
+}
+
+.menu-items span:hover {
+  color: #24c8db;
+  cursor: pointer;
+}
+
+/* --- 4. Interactive Elements --- */
+.exit-button {
+  all: unset;
+  cursor: pointer;
+  width: 44px;
+  height: 100%;
+  display: flex;
+  align-items: center;
   justify-content: center;
+  transition: background 0.2s;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+.exit-button:hover {
+  background-color: #e81123;
 }
 
-a:hover {
-  color: #535bf2;
-}
-
-h1 {
-  text-align: center;
-}
-
-input,
-button {
+input, button {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  color: #0f0f0f;
-  background-color: #ffffff;
-  transition: border-color 0.25s;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+  outline: none;
+  transition: border-color 0.25s, background-color 0.25s;
 }
 
 button {
   cursor: pointer;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
 }
 
-button:hover {
-  border-color: #396cd8;
-}
-button:active {
-  border-color: #396cd8;
-  background-color: #e8e8e8;
-}
-
-input,
-button {
-  outline: none;
+/* --- 5. Logos & Branding (Optional) --- */
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 0.75s;
 }
 
-#greet-input {
-  margin-right: 5px;
-}
+.logo.tauri:hover { filter: drop-shadow(0 0 2em #24c8db); }
+.logo.vanilla:hover { filter: drop-shadow(0 0 2em #ffe21c); }
 
+/* --- 6. Dark Mode Overrides --- */
 @media (prefers-color-scheme: dark) {
   :root {
     color: #f6f6f6;
     background-color: #2f2f2f;
   }
 
-  a:hover {
-    color: #24c8db;
-  }
-
-  input,
-  button {
+  input, button {
     color: #ffffff;
     background-color: #0f0f0f98;
   }
+
+  button:hover {
+    border-color: #396cd8;
+  }
+
   button:active {
     background-color: #0f0f0f69;
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-items {
+    gap: 10px;
+  }
+
+  .menu-items span {
+    font-size: 0.8em;
   }
 }
