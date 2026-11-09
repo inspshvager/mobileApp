@@ -79,7 +79,8 @@ function drawTiles(curTileSize, borderW) {
 
 function drawHover(curTileSize) {
   if (!state.isPanning && state.hoverCoord.x >= 0 && state.hoverCoord.x < CONFIG.MAP_WIDTH) {
-    ctx.fillStyle = state.isShiftPressed ? CONFIG.COLORS.ERASE_HOVER : CONFIG.COLORS.HOVER;
+    const isErasing = state.interactionMode === 'erase' || state.isShiftPressed;
+    ctx.fillStyle = isErasing ? CONFIG.COLORS.ERASE_HOVER : CONFIG.COLORS.HOVER;
     ctx.fillRect(
       Math.floor(state.hoverCoord.x * curTileSize + state.offsetX),
       Math.floor(state.hoverCoord.y * curTileSize + state.offsetY),

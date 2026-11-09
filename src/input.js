@@ -49,7 +49,7 @@ function handleMouseMove(e) {
     draw();
   } else {
     updateHoverFromScreen(mouseX, mouseY);
-    if (state.isPainting) paintTile(e.shiftKey);
+    if (state.isPainting) paintTile(state.interactionMode === 'erase' || e.shiftKey);
   }
 }
 
@@ -57,25 +57,46 @@ export function initEventListeners() {
   window.addEventListener('resize', setupCanvas);
   canvas.addEventListener('contextmenu', e => e.preventDefault());
 
+  const hudControls = document.querySelector('.floating-controls');
+  const updateHudVisibility = () => {
+    if (!hudControls) return;
+    const shouldHide = state.isPanning || state.isPainting || Boolean(state.pinchDistance);
+    hudControls.classList.toggle('is-hidden', shouldHide);
+  };
+
   const modeToggleButton = document.getElementById('mode-toggle-btn');
   const updateModeButton = () => {
     if (!modeToggleButton) return;
-    modeToggleButton.textContent = state.interactionMode === 'move' ? 'Move' : 'Draw';
+
+    const modeLabel =
+      state.interactionMode === 'draw' ? 'Draw' :
+      state.interactionMode === 'erase' ? 'Erase' : 'Move';
+
+    modeToggleButton.textContent = modeLabel;
     modeToggleButton.setAttribute(
       'aria-label',
-      `Toggle drawing or moving mode: ${state.interactionMode === 'move' ? 'move' : 'draw'}`
+      `Toggle editing mode: ${state.interactionMode}`
     );
   };
 
   modeToggleButton?.addEventListener('click', () => {
-    state.interactionMode = state.interactionMode === 'draw' ? 'move' : 'draw';
+    if (state.interactionMode === 'draw') {
+      state.interactionMode = 'erase';
+    } else if (state.interactionMode === 'erase') {
+      state.interactionMode = 'move';
+    } else {
+      state.interactionMode = 'draw';
+    }
+
     state.isPanning = false;
     state.isPainting = false;
     updateModeButton();
+    updateHudVisibility();
     canvas.style.cursor = state.interactionMode === 'move' ? 'grab' : 'crosshair';
   });
 
   updateModeButton();
+  updateHudVisibility();
 
   document.getElementById('exit-btn')?.addEventListener('click', async () => {
     await getCurrentWebviewWindow().close();
@@ -106,6 +127,7 @@ export function initEventListeners() {
       const [a, b] = Array.from(e.touches);
       state.pinchDistance = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
       state.pinchScaleStart = state.scale;
+      updateHudVisibility();
       return;
     }
 
@@ -119,13 +141,15 @@ export function initEventListeners() {
         state.isPanning = true;
         state.startX = touch.clientX - state.offsetX;
         state.startY = touch.clientY - state.offsetY;
+        updateHudVisibility();
         canvas.style.cursor = 'grabbing';
         return;
       }
 
       state.isPainting = true;
+      updateHudVisibility();
       updateHoverFromScreen(touchX, touchY);
-      paintTile(false);
+      paintTile(state.interactionMode === 'erase');
       canvas.style.cursor = 'crosshair';
     }
   }, { passive: false });
@@ -140,6 +164,7 @@ export function initEventListeners() {
       const newDistance = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
       const scaleRatio = newDistance / state.pinchDistance;
       zoomAtPoint(state.pinchScaleStart * scaleRatio, midpointX, midpointY);
+      updateHudVisibility();
       draw();
       return;
     }
@@ -160,10 +185,10 @@ export function initEventListeners() {
         return;
       }
 
-      if (state.interactionMode === 'draw' && state.isPainting) {
+      if ((state.interactionMode === 'draw' || state.interactionMode === 'erase') && state.isPainting) {
         updateHoverFromScreen(touchX, touchY);
         if (state.hoverCoord.x >= 0 && state.hoverCoord.x < CONFIG.MAP_WIDTH && state.hoverCoord.y >= 0 && state.hoverCoord.y < CONFIG.MAP_HEIGHT) {
-          paintTile(false);
+          paintTile(state.interactionMode === 'erase');
         }
       }
     }
@@ -175,23 +200,8 @@ export function initEventListeners() {
       state.pinchScaleStart = 1.0;
       state.isPanning = false;
       state.isPainting = false;
+      updateHudVisibility();
       canvas.style.cursor = 'crosshair';
-      return;
-    }
-
-    if (e.touches.length === 1) {
-      const touch = e.touches[0];
-      const rect = canvas.getBoundingClientRect();
-      const touchX = touch.clientX - rect.left;
-      const touchY = touch.clientY - rect.top;
-
-      if (state.interactionMode === 'move') {
-        state.isPanning = false;
-        canvas.style.cursor = 'crosshair';
-      } else {
-        state.isPainting = false;
-        updateHoverFromScreen(touchX, touchY);
-      }
     }
   });
 
@@ -210,10 +220,12 @@ export function initEventListeners() {
       state.isPanning = true;
       state.startX = e.clientX - state.offsetX;
       state.startY = e.clientY - state.offsetY;
+      updateHudVisibility();
       canvas.style.cursor = 'grabbing';
     } else if (e.button === 0) {
       state.isPainting = true;
-      paintTile(e.shiftKey);
+      updateHudVisibility();
+      paintTile(state.interactionMode === 'erase' || e.shiftKey);
     }
   });
 
@@ -225,6 +237,7 @@ export function initEventListeners() {
       state.isPanning = false;
       canvas.style.cursor = 'crosshair';
     }
+    updateHudVisibility();
   });
 
   window.addEventListener('keydown', e => {
