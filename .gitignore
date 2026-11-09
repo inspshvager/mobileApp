@@ -32,3 +32,6 @@ src-tauri/gen/android/local.properties
 
 # Rust / Cargo build outputs
 src-tauri/target/
+
+# VS Code extension directories
+.vscode/
