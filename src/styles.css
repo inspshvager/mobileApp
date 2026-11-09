@@ -55,6 +55,14 @@ body {
 }
 
 
+#app-container {
+  --color-menu-offset: 182px;
+}
+
+#app-container.color-menu-open .floating-controls {
+  transform: translateY(calc(-1 * var(--color-menu-offset)));
+}
+
 .floating-controls {
   position: absolute;
   left: 0;
@@ -91,6 +99,100 @@ body {
   transition: transform 0.22s ease, opacity 0.22s ease;
 }
 
+.color-menu {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 150;
+  transform: translateY(calc(100% - 36px));
+  transition: transform 0.28s ease;
+  pointer-events: auto;
+}
+
+.color-menu.is-open {
+  transform: translateY(0);
+}
+
+.color-menu-content {
+  background: rgba(18, 20, 26, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 22px 22px 16px 16px;
+  box-shadow: 0 -8px 22px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 14px 14px 18px;
+}
+
+.color-menu-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(36%, 120px);
+  height: 38px;
+  margin: 0 auto;
+  border-radius: 18px 18px 0 0;
+  background: rgba(18, 20, 26, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: none;
+  cursor: grab;
+  touch-action: none;
+  box-sizing: border-box;
+}
+
+.color-menu-grabber {
+  width: 46px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.color-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+}
+
+.selected-color-label {
+  font-weight: 700;
+  color: #fff;
+}
+
+.color-swatches {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.color-swatch {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  background: var(--swatch-color);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.color-swatch.is-selected {
+  border-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.18);
+  transform: scale(1.02);
+}
+
+.color-swatch:hover,
+.color-swatch:active,
+.color-swatch:focus-visible {
+  background: var(--swatch-color);
+  transform: scale(1.02);
+}
+
 .zoom-button,
 .mode-toggle-button {
   all: unset;
@@ -117,14 +219,45 @@ body {
 }
 
 .mode-toggle-button {
-  min-width: 92px;
+  width: 54px;
   height: 54px;
-  padding: 0 16px;
-  font-size: 0.9rem;
+  padding: 0;
+  font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   pointer-events: auto;
+  box-sizing: border-box;
   transition: transform 0.22s ease, background 0.2s ease, opacity 0.22s ease;
+}
+
+.mode-toggle-button.mode-draw {
+  background: rgba(38, 99, 235, 0.82);
+}
+
+.mode-toggle-button.mode-erase {
+  background: rgba(220, 38, 38, 0.82);
+}
+
+.mode-toggle-button.mode-move {
+  background: rgba(22, 163, 74, 0.82);
+}
+
+.mode-toggle-button.mode-draw:hover,
+.mode-toggle-button.mode-draw:active,
+.mode-toggle-button.mode-draw:focus-visible {
+  background: rgba(38, 99, 235, 0.94);
+}
+
+.mode-toggle-button.mode-erase:hover,
+.mode-toggle-button.mode-erase:active,
+.mode-toggle-button.mode-erase:focus-visible {
+  background: rgba(220, 38, 38, 0.94);
+}
+
+.mode-toggle-button.mode-move:hover,
+.mode-toggle-button.mode-move:active,
+.mode-toggle-button.mode-move:focus-visible {
+  background: rgba(22, 163, 74, 0.94);
 }
 
 .zoom-button:active,
@@ -181,6 +314,30 @@ button {
 
   button:active {
     background-color: #0f0f0f69;
+  }
+
+  .color-swatch:hover,
+  .color-swatch:active,
+  .color-swatch:focus-visible {
+    background: var(--swatch-color);
+  }
+
+  .mode-toggle-button.mode-draw:hover,
+  .mode-toggle-button.mode-draw:active,
+  .mode-toggle-button.mode-draw:focus-visible {
+    background: rgba(38, 99, 235, 0.94);
+  }
+
+  .mode-toggle-button.mode-erase:hover,
+  .mode-toggle-button.mode-erase:active,
+  .mode-toggle-button.mode-erase:focus-visible {
+    background: rgba(220, 38, 38, 0.94);
+  }
+
+  .mode-toggle-button.mode-move:hover,
+  .mode-toggle-button.mode-move:active,
+  .mode-toggle-button.mode-move:focus-visible {
+    background: rgba(22, 163, 74, 0.94);
   }
 }
 

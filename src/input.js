@@ -57,12 +57,65 @@ export function initEventListeners() {
   window.addEventListener('resize', setupCanvas);
   canvas.addEventListener('contextmenu', e => e.preventDefault());
 
+  const appContainer = document.getElementById('app-container');
   const hudControls = document.querySelector('.floating-controls');
+  const colorMenu = document.getElementById('color-menu');
+  const colorSwatches = Array.from(document.querySelectorAll('.color-swatch'));
+  const selectedColorLabel = document.getElementById('selected-color-label');
+  const colorMenuHandle = document.getElementById('color-menu-handle');
+
   const updateHudVisibility = () => {
     if (!hudControls) return;
     const shouldHide = state.isPanning || state.isPainting || Boolean(state.pinchDistance);
     hudControls.classList.toggle('is-hidden', shouldHide);
   };
+
+  const updateSelectedColor = () => {
+    const activeColorName = CONFIG.PALETTE.find(item => item.value.toLowerCase() === state.selectedColor.toLowerCase())?.name ?? 'Blue';
+    if (selectedColorLabel) selectedColorLabel.textContent = activeColorName;
+    colorSwatches.forEach(swatch => {
+      const selected = swatch.dataset.color.toLowerCase() === state.selectedColor.toLowerCase();
+      swatch.classList.toggle('is-selected', selected);
+      swatch.setAttribute('aria-pressed', String(selected));
+    });
+  };
+
+  const toggleColorMenu = (isOpen) => {
+    if (!colorMenu || !appContainer) return;
+    state.isColorMenuOpen = isOpen;
+    colorMenu.classList.toggle('is-open', isOpen);
+    colorMenu.setAttribute('aria-expanded', String(isOpen));
+    appContainer.classList.toggle('color-menu-open', isOpen);
+    updateSelectedColor();
+    requestAnimationFrame(() => updateSelectedColor());
+  };
+
+  colorSwatches.forEach(swatch => {
+    swatch.addEventListener('pointerdown', event => {
+      event.preventDefault();
+      state.selectedColor = swatch.dataset.color;
+      updateSelectedColor();
+      requestAnimationFrame(() => updateSelectedColor());
+      toggleColorMenu(false);
+    });
+  });
+
+  let swipeStartY = 0;
+  colorMenuHandle?.addEventListener('pointerdown', event => {
+    swipeStartY = event.clientY;
+    colorMenuHandle.setPointerCapture(event.pointerId);
+  });
+
+  colorMenuHandle?.addEventListener('pointerup', event => {
+    const deltaY = event.clientY - swipeStartY;
+    if (deltaY < -30) {
+      toggleColorMenu(true);
+    } else if (deltaY > 30) {
+      toggleColorMenu(false);
+    } else {
+      toggleColorMenu(!state.isColorMenuOpen);
+    }
+  });
 
   const modeToggleButton = document.getElementById('mode-toggle-btn');
   const updateModeButton = () => {
@@ -73,6 +126,10 @@ export function initEventListeners() {
       state.interactionMode === 'erase' ? 'Erase' : 'Move';
 
     modeToggleButton.textContent = modeLabel;
+    modeToggleButton.dataset.mode = state.interactionMode;
+    modeToggleButton.classList.toggle('mode-draw', state.interactionMode === 'draw');
+    modeToggleButton.classList.toggle('mode-erase', state.interactionMode === 'erase');
+    modeToggleButton.classList.toggle('mode-move', state.interactionMode === 'move');
     modeToggleButton.setAttribute(
       'aria-label',
       `Toggle editing mode: ${state.interactionMode}`

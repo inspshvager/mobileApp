@@ -53,7 +53,7 @@ function drawGrid(curTileSize, worldPxW, worldPxH) {
 }
 
 function drawTiles(curTileSize, borderW) {
-  state.placedTiles.forEach(tileKey => {
+  state.placedTiles.forEach((tileColor, tileKey) => {
     const [tx, ty] = tileKey.split(',').map(Number);
     const x = Math.floor(tx * curTileSize + state.offsetX);
     const y = Math.floor(ty * curTileSize + state.offsetY);
@@ -66,7 +66,7 @@ function drawTiles(curTileSize, borderW) {
       r: state.placedTiles.has(`${tx + 1},${ty}`)
     };
 
-    ctx.fillStyle = CONFIG.COLORS.TILE_BASE;
+    ctx.fillStyle = tileColor || CONFIG.COLORS.TILE_BASE;
     ctx.fillRect(x, y, size, size);
 
     ctx.fillStyle = CONFIG.COLORS.TILE_BORDER;

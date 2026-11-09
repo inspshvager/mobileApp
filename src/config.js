@@ -2,6 +2,14 @@ export const CONFIG = {
   GRID_SIZE: 16,
   MAP_WIDTH: 128,
   MAP_HEIGHT: 128,
+  PALETTE: [
+    { name: 'Blue', value: '#0000FF' },
+    { name: 'Teal', value: '#14B8A6' },
+    { name: 'Orange', value: '#F97316' },
+    { name: 'Purple', value: '#8B5CF6' },
+    { name: 'Yellow', value: '#FACC15' },
+    { name: 'Red', value: '#EF4444' }
+  ],
   COLORS: {
     GRID: '#444',
     VOID: '#111',

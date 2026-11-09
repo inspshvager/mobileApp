@@ -18,8 +18,9 @@ export function paintTile(isErasing = false) {
       draw();
     }
   } else {
-    if (!state.placedTiles.has(tileKey)) {
-      state.placedTiles.add(tileKey);
+    const currentColor = state.placedTiles.get(tileKey);
+    if (currentColor !== state.selectedColor) {
+      state.placedTiles.set(tileKey, state.selectedColor);
       draw();
     }
   }
