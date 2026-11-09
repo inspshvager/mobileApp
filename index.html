@@ -17,24 +17,27 @@
             <button id="zoom-out-btn" class="zoom-button" type="button" aria-label="Zoom out">−</button>
             <button id="zoom-in-btn" class="zoom-button" type="button" aria-label="Zoom in">＋</button>
           </div>
-          <button id="mode-toggle-btn" class="mode-toggle-button" type="button" aria-label="Toggle drawing or moving mode">D</button>
+
+          <div class="right-side-controls">
+            <button id="color-picker-btn" class="color-picker-button" type="button" aria-label="Open tile color picker">
+              <span class="color-picker-dot" aria-hidden="true"></span>
+            </button>
+            <button id="mode-toggle-btn" class="mode-toggle-button" type="button" aria-label="Toggle drawing or moving mode">Draw</button>
+          </div>
         </div>
 
         <div id="color-menu" class="color-menu" aria-label="Tile color palette" aria-expanded="false">
-          <div id="color-menu-handle" class="color-menu-handle" aria-label="Open color selector">
-            <span class="color-menu-grabber"></span>
-          </div>
           <div class="color-menu-content">
             <div class="color-menu-header">
-              <span>Tile color</span>
-              <span id="selected-color-label" class="selected-color-label">Blue</span>
+              <span>Choose color</span>
+              <button id="color-menu-close" class="color-menu-close" type="button" aria-label="Close color selector">✕</button>
             </div>
             <div class="color-swatches" role="listbox" aria-label="Select tile color">
               <button class="color-swatch is-selected" type="button" data-color="#0000FF" aria-label="Blue" title="Blue" style="--swatch-color: #0000FF;"></button>
-              <button class="color-swatch" type="button" data-color="#14B8A6" aria-label="Teal" title="Teal" style="--swatch-color: #14B8A6;"></button>
-              <button class="color-swatch" type="button" data-color="#F97316" aria-label="Orange" title="Orange" style="--swatch-color: #F97316;"></button>
               <button class="color-swatch" type="button" data-color="#8B5CF6" aria-label="Purple" title="Purple" style="--swatch-color: #8B5CF6;"></button>
+              <button class="color-swatch" type="button" data-color="#14B8A6" aria-label="Teal" title="Teal" style="--swatch-color: #14B8A6;"></button>
               <button class="color-swatch" type="button" data-color="#FACC15" aria-label="Yellow" title="Yellow" style="--swatch-color: #FACC15;"></button>
+              <button class="color-swatch" type="button" data-color="#F97316" aria-label="Orange" title="Orange" style="--swatch-color: #F97316;"></button>
               <button class="color-swatch" type="button" data-color="#EF4444" aria-label="Red" title="Red" style="--swatch-color: #EF4444;"></button>
             </div>
           </div>

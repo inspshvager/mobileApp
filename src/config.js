@@ -4,10 +4,10 @@ export const CONFIG = {
   MAP_HEIGHT: 128,
   PALETTE: [
     { name: 'Blue', value: '#0000FF' },
-    { name: 'Teal', value: '#14B8A6' },
-    { name: 'Orange', value: '#F97316' },
     { name: 'Purple', value: '#8B5CF6' },
+    { name: 'Teal', value: '#14B8A6' },
     { name: 'Yellow', value: '#FACC15' },
+    { name: 'Orange', value: '#F97316' },
     { name: 'Red', value: '#EF4444' }
   ],
   COLORS: {

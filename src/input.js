@@ -60,9 +60,10 @@ export function initEventListeners() {
   const appContainer = document.getElementById('app-container');
   const hudControls = document.querySelector('.floating-controls');
   const colorMenu = document.getElementById('color-menu');
+  const colorMenuCloseButton = document.getElementById('color-menu-close');
   const colorSwatches = Array.from(document.querySelectorAll('.color-swatch'));
   const selectedColorLabel = document.getElementById('selected-color-label');
-  const colorMenuHandle = document.getElementById('color-menu-handle');
+  const colorPickerButton = document.getElementById('color-picker-btn');
 
   const updateHudVisibility = () => {
     if (!hudControls) return;
@@ -73,6 +74,8 @@ export function initEventListeners() {
   const updateSelectedColor = () => {
     const activeColorName = CONFIG.PALETTE.find(item => item.value.toLowerCase() === state.selectedColor.toLowerCase())?.name ?? 'Blue';
     if (selectedColorLabel) selectedColorLabel.textContent = activeColorName;
+    if (colorPickerButton) colorPickerButton.style.setProperty('--picker-color', state.selectedColor);
+
     colorSwatches.forEach(swatch => {
       const selected = swatch.dataset.color.toLowerCase() === state.selectedColor.toLowerCase();
       swatch.classList.toggle('is-selected', selected);
@@ -90,6 +93,21 @@ export function initEventListeners() {
     requestAnimationFrame(() => updateSelectedColor());
   };
 
+  colorPickerButton?.addEventListener('click', event => {
+    event.preventDefault();
+    toggleColorMenu(!state.isColorMenuOpen);
+  });
+
+  colorMenuCloseButton?.addEventListener('click', () => {
+    toggleColorMenu(false);
+  });
+
+  appContainer?.addEventListener('pointerdown', event => {
+    if (state.isColorMenuOpen && !colorMenu?.contains(event.target) && !colorPickerButton?.contains(event.target)) {
+      toggleColorMenu(false);
+    }
+  });
+
   colorSwatches.forEach(swatch => {
     swatch.addEventListener('pointerdown', event => {
       event.preventDefault();
@@ -98,23 +116,6 @@ export function initEventListeners() {
       requestAnimationFrame(() => updateSelectedColor());
       toggleColorMenu(false);
     });
-  });
-
-  let swipeStartY = 0;
-  colorMenuHandle?.addEventListener('pointerdown', event => {
-    swipeStartY = event.clientY;
-    colorMenuHandle.setPointerCapture(event.pointerId);
-  });
-
-  colorMenuHandle?.addEventListener('pointerup', event => {
-    const deltaY = event.clientY - swipeStartY;
-    if (deltaY < -30) {
-      toggleColorMenu(true);
-    } else if (deltaY > 30) {
-      toggleColorMenu(false);
-    } else {
-      toggleColorMenu(!state.isColorMenuOpen);
-    }
   });
 
   const modeToggleButton = document.getElementById('mode-toggle-btn');
