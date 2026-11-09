@@ -23,6 +23,7 @@ build/
 *.njsproj
 *.sln
 *.sw?
+Thumbs.db
 
 # Android generated files
 src-tauri/gen/android/.gradle/
@@ -30,8 +31,11 @@ src-tauri/gen/android/build/
 src-tauri/gen/android/app/build/
 src-tauri/gen/android/local.properties
 
-# Rust / Cargo build outputs
+# Rust / Cargo buld outputs
 src-tauri/target/
 
 # VS Code extension directories
 .vscode/
+
+# Vite local cache
+.vite/
