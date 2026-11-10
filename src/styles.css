@@ -192,6 +192,7 @@ body {
   transform: scale(1.02);
 }
 
+.save-button,
 .zoom-button,
 .color-picker-button,
 .mode-toggle-button {
@@ -208,6 +209,18 @@ body {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   transition: transform 0.18s ease, background 0.2s ease, opacity 0.22s ease;
+}
+
+.save-button {
+  position: absolute;
+  top: max(18px, env(safe-area-inset-top));
+  right: 16px;
+  width: 54px;
+  height: 54px;
+  font-size: 1.6rem;
+  line-height: 1;
+  z-index: 250;
+  pointer-events: auto;
 }
 
 .zoom-button {
