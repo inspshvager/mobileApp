@@ -8,6 +8,7 @@ export const state = {
   isShiftPressed: false,
   interactionMode: 'draw',
   selectedColor: '#0000FF',
+  tileStyle: 'smart-connect',
   isColorMenuOpen: false,
   startX: 0,
   startY: 0,

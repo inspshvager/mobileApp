@@ -53,27 +53,51 @@ function drawGrid(curTileSize, worldPxW, worldPxH) {
 }
 
 function drawTiles(curTileSize, borderW) {
-  state.placedTiles.forEach((tileColor, tileKey) => {
+  state.placedTiles.forEach((tileValue, tileKey) => {
+    const tile = typeof tileValue === 'string' ? { color: tileValue, style: 'smart-connect' } : tileValue;
+    const tileColor = tile.color || CONFIG.COLORS.TILE_BASE;
+    const tileStyle = tile.style ?? state.tileStyle ?? 'smart-connect';
+
     const [tx, ty] = tileKey.split(',').map(Number);
     const x = Math.floor(tx * curTileSize + state.offsetX);
     const y = Math.floor(ty * curTileSize + state.offsetY);
     const size = Math.ceil(curTileSize);
 
-    const neighbors = {
-      t: state.placedTiles.has(`${tx},${ty - 1}`),
-      b: state.placedTiles.has(`${tx},${ty + 1}`),
-      l: state.placedTiles.has(`${tx - 1},${ty}`),
-      r: state.placedTiles.has(`${tx + 1},${ty}`)
-    };
-
-    ctx.fillStyle = tileColor || CONFIG.COLORS.TILE_BASE;
+    ctx.fillStyle = tileColor;
     ctx.fillRect(x, y, size, size);
 
+    if (tileStyle === 'solid') {
+      return;
+    }
+
+    if (tileStyle === 'smart-connect') {
+      const neighbors = {
+        t: state.placedTiles.has(`${tx},${ty - 1}`),
+        b: state.placedTiles.has(`${tx},${ty + 1}`),
+        l: state.placedTiles.has(`${tx - 1},${ty}`),
+        r: state.placedTiles.has(`${tx + 1},${ty}`)
+      };
+
+      ctx.fillStyle = CONFIG.COLORS.TILE_BORDER;
+      if (!neighbors.t) ctx.fillRect(x, y, size, borderW);
+      if (!neighbors.b) ctx.fillRect(x, y + size - borderW, size, borderW);
+      if (!neighbors.l) ctx.fillRect(x, y, borderW, size);
+      if (!neighbors.r) ctx.fillRect(x + size - borderW, y, borderW, size);
+      return;
+    }
+
+    const borderSides = {
+      t: tileStyle === 'border-all' || tileStyle === 'border-bottom' || tileStyle === 'border-left' || tileStyle === 'border-right',
+      b: tileStyle === 'border-all' || tileStyle === 'border-top' || tileStyle === 'border-left' || tileStyle === 'border-right',
+      l: tileStyle === 'border-all' || tileStyle === 'border-top' || tileStyle === 'border-bottom' || tileStyle === 'border-left',
+      r: tileStyle === 'border-all' || tileStyle === 'border-top' || tileStyle === 'border-bottom' || tileStyle === 'border-right'
+    };
+
     ctx.fillStyle = CONFIG.COLORS.TILE_BORDER;
-    if (!neighbors.t) ctx.fillRect(x, y, size, borderW);
-    if (!neighbors.b) ctx.fillRect(x, y + size - borderW, size, borderW);
-    if (!neighbors.l) ctx.fillRect(x, y, borderW, size);
-    if (!neighbors.r) ctx.fillRect(x + size - borderW, y, borderW, size);
+    if (borderSides.t) ctx.fillRect(x, y, size, borderW);
+    if (borderSides.b) ctx.fillRect(x, y + size - borderW, size, borderW);
+    if (borderSides.l) ctx.fillRect(x, y, borderW, size);
+    if (borderSides.r) ctx.fillRect(x + size - borderW, y, borderW, size);
   });
 }
 

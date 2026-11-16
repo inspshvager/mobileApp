@@ -3,12 +3,35 @@ export const CONFIG = {
   MAP_WIDTH: 64,
   MAP_HEIGHT: 64,
   PALETTE: [
+    { name: 'Black', value: '#000000' },
+    { name: 'White', value: '#FFFFFF' },
     { name: 'Blue', value: '#0000FF' },
-    { name: 'Purple', value: '#8B5CF6' },
+    { name: 'Deep Blue', value: '#0070C0' },
+    { name: 'Sky Blue', value: '#00B0F0' },
     { name: 'Teal', value: '#14B8A6' },
+    { name: 'Green', value: '#00B050' },
+    { name: 'Light Green', value: '#92D050' },
     { name: 'Yellow', value: '#FACC15' },
+    { name: 'Gold', value: '#FFC000' },
     { name: 'Orange', value: '#F97316' },
-    { name: 'Red', value: '#EF4444' }
+    { name: 'Dark Orange', value: '#E46C0A' },
+    { name: 'Red', value: '#EF4444' },
+    { name: 'Dark Red', value: '#C00000' },
+    { name: 'Purple', value: '#8B5CF6' },
+    { name: 'Violet', value: '#7030A0' },
+    { name: 'Gray', value: '#A5A5A5' },
+    { name: 'Peach', value: '#F4B183' },
+    { name: 'Soft Green', value: '#A9D18E' },
+    { name: 'Light Blue', value: '#BDD7EE' }
+  ],
+  TILE_STYLES: [
+    { id: 'smart-connect', label: 'Smart' },
+    { id: 'solid', label: 'Fill' },
+    { id: 'border-all', label: 'Border' },
+    { id: 'border-top', label: 'Top' },
+    { id: 'border-bottom', label: 'Bottom' },
+    { id: 'border-right', label: 'Right' },
+    { id: 'border-left', label: 'Left' }
   ],
   COLORS: {
     GRID: '#444',

@@ -17,11 +17,18 @@ export function paintTile(isErasing = false) {
       state.placedTiles.delete(tileKey);
       draw();
     }
-  } else {
-    const currentColor = state.placedTiles.get(tileKey);
-    if (currentColor !== state.selectedColor) {
-      state.placedTiles.set(tileKey, state.selectedColor);
-      draw();
-    }
+    return;
+  }
+
+  const currentTile = state.placedTiles.get(tileKey);
+  const currentColor = typeof currentTile === 'string' ? currentTile : currentTile?.color;
+  const currentStyle = typeof currentTile === 'string' ? 'smart-connect' : currentTile?.style ?? 'smart-connect';
+
+  if (currentColor !== state.selectedColor || currentStyle !== state.tileStyle) {
+    state.placedTiles.set(tileKey, {
+      color: state.selectedColor,
+      style: state.tileStyle
+    });
+    draw();
   }
 }

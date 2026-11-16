@@ -12,7 +12,16 @@
   <body>
     <main class="container">
       <div id="app-container">
-        <button id="save-map-btn" class="save-button" type="button" aria-label="Save map">💾</button>
+        <button id="settings-button" class="settings-button" type="button" aria-label="Open settings menu">⚙️</button>
+
+        <div id="settings-menu" class="settings-menu" aria-label="Project actions" aria-expanded="false">
+          <button class="settings-menu-item" data-action="save" type="button">Save</button>
+          <button class="settings-menu-item" data-action="save-as" type="button">Save As</button>
+          <button class="settings-menu-item" data-action="load" type="button">Load</button>
+          <button class="settings-menu-item" data-action="export" type="button">Export</button>
+          <button class="settings-menu-item" data-action="settings" type="button">Settings</button>
+          <button class="settings-menu-item danger" data-action="new" type="button">New</button>
+        </div>
 
         <div class="floating-controls">
           <div class="zoom-controls" aria-label="Zoom controls">
@@ -21,10 +30,44 @@
           </div>
 
           <div class="right-side-controls">
+            <button id="tile-picker-btn" class="tile-picker-button" type="button" aria-label="Open tile pattern picker"></button>
             <button id="color-picker-btn" class="color-picker-button" type="button" aria-label="Open tile color picker">
               <span class="color-picker-dot" aria-hidden="true"></span>
             </button>
             <button id="mode-toggle-btn" class="mode-toggle-button" type="button" aria-label="Toggle drawing or moving mode">Draw</button>
+          </div>
+        </div>
+
+        <div id="tile-menu" class="tile-menu" aria-label="Tile pattern picker" aria-expanded="false">
+          <div class="tile-menu-content">
+            <div class="tile-menu-header">
+              <span>Choose tile</span>
+              <button id="tile-menu-close" class="color-menu-close" type="button" aria-label="Close tile selector">✕</button>
+            </div>
+
+            <div class="tile-option-list">
+              <button class="tile-option is-selected" type="button" data-tile-style="smart-connect" aria-label="Smart connected tiles">
+                <span class="tile-option-preview tile-preview-smart" aria-hidden="true"></span>
+              </button>
+              <button class="tile-option" type="button" data-tile-style="solid" aria-label="Filled tile">
+                <span class="tile-option-preview tile-preview-solid" aria-hidden="true"></span>
+              </button>
+              <button class="tile-option" type="button" data-tile-style="border-all" aria-label="Full border tile">
+                <span class="tile-option-preview tile-preview-border-all" aria-hidden="true"></span>
+              </button>
+              <button class="tile-option" type="button" data-tile-style="border-top" aria-label="Border without top">
+                <span class="tile-option-preview tile-preview-border-top" aria-hidden="true"></span>
+              </button>
+              <button class="tile-option" type="button" data-tile-style="border-bottom" aria-label="Border without bottom">
+                <span class="tile-option-preview tile-preview-border-bottom" aria-hidden="true"></span>
+              </button>
+              <button class="tile-option" type="button" data-tile-style="border-right" aria-label="Border without right">
+                <span class="tile-option-preview tile-preview-border-right" aria-hidden="true"></span>
+              </button>
+              <button class="tile-option" type="button" data-tile-style="border-left" aria-label="Border without left">
+                <span class="tile-option-preview tile-preview-border-left" aria-hidden="true"></span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -34,14 +77,63 @@
               <span>Choose color</span>
               <button id="color-menu-close" class="color-menu-close" type="button" aria-label="Close color selector">✕</button>
             </div>
+
+            <div class="color-picker-panel">
+              <div class="color-preview-wrap">
+                <div id="current-color-preview" class="current-color-preview" aria-label="Current color preview"></div>
+                <div id="current-color-value" class="current-color-value">#0000FF</div>
+              </div>
+
+              <div class="rgb-controls" aria-label="RGB color controls">
+                <label class="rgb-control">
+                  <span>R</span>
+                  <input id="red-slider" type="range" min="0" max="255" value="0" />
+                </label>
+                <label class="rgb-control">
+                  <span>G</span>
+                  <input id="green-slider" type="range" min="0" max="255" value="0" />
+                </label>
+                <label class="rgb-control">
+                  <span>B</span>
+                  <input id="blue-slider" type="range" min="0" max="255" value="255" />
+                </label>
+              </div>
+            </div>
+
             <div class="color-swatches" role="listbox" aria-label="Select tile color">
               <button class="color-swatch is-selected" type="button" data-color="#0000FF" aria-label="Blue" title="Blue" style="--swatch-color: #0000FF;"></button>
-              <button class="color-swatch" type="button" data-color="#8B5CF6" aria-label="Purple" title="Purple" style="--swatch-color: #8B5CF6;"></button>
-              <button class="color-swatch" type="button" data-color="#14B8A6" aria-label="Teal" title="Teal" style="--swatch-color: #14B8A6;"></button>
-              <button class="color-swatch" type="button" data-color="#FACC15" aria-label="Yellow" title="Yellow" style="--swatch-color: #FACC15;"></button>
-              <button class="color-swatch" type="button" data-color="#F97316" aria-label="Orange" title="Orange" style="--swatch-color: #F97316;"></button>
-              <button class="color-swatch" type="button" data-color="#EF4444" aria-label="Red" title="Red" style="--swatch-color: #EF4444;"></button>
+              <button class="color-swatch" type="button" data-color="#000000" aria-label="Black" title="Black" style="--swatch-color: #000000;"></button>
+              <button class="color-swatch" type="button" data-color="#FFFFFF" aria-label="White" title="White" style="--swatch-color: #FFFFFF;"></button>
+              <button class="color-swatch" type="button" data-color="#FF0000" aria-label="Red" title="Red" style="--swatch-color: #FF0000;"></button>
+              <button class="color-swatch" type="button" data-color="#FF6600" aria-label="Orange" title="Orange" style="--swatch-color: #FF6600;"></button>
+              <button class="color-swatch" type="button" data-color="#FFCC00" aria-label="Yellow" title="Yellow" style="--swatch-color: #FFCC00;"></button>
+              <button class="color-swatch" type="button" data-color="#00B050" aria-label="Green" title="Green" style="--swatch-color: #00B050;"></button>
+              <button class="color-swatch" type="button" data-color="#00B0F0" aria-label="Sky blue" title="Sky blue" style="--swatch-color: #00B0F0;"></button>
+              <button class="color-swatch" type="button" data-color="#0070C0" aria-label="Blue deep" title="Blue deep" style="--swatch-color: #0070C0;"></button>
+              <button class="color-swatch" type="button" data-color="#7030A0" aria-label="Violet" title="Violet" style="--swatch-color: #7030A0;"></button>
+              <button class="color-swatch" type="button" data-color="#E46C0A" aria-label="Dark orange" title="Dark orange" style="--swatch-color: #E46C0A;"></button>
+              <button class="color-swatch" type="button" data-color="#C00000" aria-label="Dark red" title="Dark red" style="--swatch-color: #C00000;"></button>
+              <button class="color-swatch" type="button" data-color="#A5A5A5" aria-label="Gray" title="Gray" style="--swatch-color: #A5A5A5;"></button>
+              <button class="color-swatch" type="button" data-color="#FFC000" aria-label="Gold" title="Gold" style="--swatch-color: #FFC000;"></button>
+              <button class="color-swatch" type="button" data-color="#92D050" aria-label="Light green" title="Light green" style="--swatch-color: #92D050;"></button>
+              <button class="color-swatch" type="button" data-color="#BDD7EE" aria-label="Light blue" title="Light blue" style="--swatch-color: #BDD7EE;"></button>
+              <button class="color-swatch" type="button" data-color="#F4B183" aria-label="Peach" title="Peach" style="--swatch-color: #F4B183;"></button>
+              <button class="color-swatch" type="button" data-color="#A9D18E" aria-label="Soft green" title="Soft green" style="--swatch-color: #A9D18E;"></button>
             </div>
+          </div>
+        </div>
+
+        <div id="save-file-menu" class="save-file-menu" aria-label="Saved map files" aria-expanded="false">
+          <div class="save-file-menu-content">
+            <div class="save-file-menu-header">
+              <span>Saved maps</span>
+              <button id="save-file-menu-close" class="color-menu-close" type="button" aria-label="Close saved maps">✕</button>
+            </div>
+            <div class="save-file-menu-actions">
+              <button id="save-file-clear-all" class="save-file-clear-all" type="button">Clear all</button>
+            </div>
+            <div id="save-file-list" class="save-file-list" aria-live="polite"></div>
+            <div id="save-file-empty" class="save-file-empty">No saved maps yet.</div>
           </div>
         </div>
 
